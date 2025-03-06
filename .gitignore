@@ -1,0 +1,54 @@
+## Ignore Visual Studio temporary files, directories, and files
+.vs/
+.vscode/
+.idea/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ebug-All/
+[Dd]ebug-AnyCPU/
+[Dd]ebug-x64/
+[Dd]ebug-x86/
+bin/
+obj/
+
+## ASP.NET Core web app related
+wwwroot/
+node_modules/
+
+## ASP.NET specific
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# User-specific files
+*.swp
+
+# NPM package manager files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+ssh-git.sh
