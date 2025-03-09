@@ -8,7 +8,8 @@ namespace MessagingApp.MappingProfiles
     {
         public UserProfile()
         {
-            CreateMap<UserUpdateDTO, User>();
+            CreateMap<UserUpdateDTO, User>()
+                .ForAllMembers(opt => opt.MapFrom((src, dest, srcMember, destMember) => srcMember ?? destMember));
         }
     }
 }
