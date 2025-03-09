@@ -1,10 +1,17 @@
+using MessagingApp.Configurations;
 using MessagingApp.Context;
 using MessagingApp.Services.Users;
+using MessagingApp.Services.Users.Passwords;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// add configurations
+builder.Services.Configure<Argon2Settings>(builder.Configuration.GetSection("Argon2Settings"));
+
+// add scoped services
 builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 // add autoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
