@@ -1,10 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace MessagingApp.Models.DTOs
 {
     public class UserUpdateDTO
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        [MinLength(2)]
+        public string? FirstName { get; set; }
+
+        [MinLength(2)]
+        public string? LastName { get; set; }
+
+        public string? Email { get; set; }
 
     }
 }
