@@ -2,20 +2,26 @@ using AutoMapper;
 using MessagingApp.Context;
 using MessagingApp.Models.DTOs;
 using MessagingApp.Models.Entities;
+using MessagingApp.Services.Users.Passwords;
 using Microsoft.EntityFrameworkCore;
 
 namespace MessagingApp.Services.Users
 {
-    public class UserServices(ApplicationDbContext _context, IMapper mapper) : IUserService
+    public class UserServices(
+        ApplicationDbContext _context,
+        IMapper mapper,
+        IPasswordService passwordService
+    ) : IUserService
     {
         public async Task<User> CreateUserAysnc(UserCreateDTO createUserDTO)
         {
+            string hashedPassword = await passwordService.HashPasswordAsync(createUserDTO.Password);
             User user = new()
             {
                 FirstName = createUserDTO.FirstName,
                 LastName = createUserDTO.LastName,
                 Email = createUserDTO.Email,
-                Password = createUserDTO.Password
+                Password = hashedPassword
             };
 
             _context.Users.Add(user);
