@@ -1,15 +1,43 @@
 using MessagingApp.Configurations;
 using MessagingApp.Context;
+using MessagingApp.Events;
+using MessagingApp.Services.Auth;
 using MessagingApp.Services.Users;
 using MessagingApp.Services.Users.Passwords;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // add configurations
 builder.Services.Configure<Argon2Settings>(builder.Configuration.GetSection("Argon2Settings"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<CookieSettings>(builder.Configuration.GetSection("CookieSettings"));
+
+// add http context
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// add authentication
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options => {
+    CookieSettings? cookieSettings = builder.Configuration.GetSection("CookieSettings").Get<CookieSettings>();
+    
+    options.Cookie.HttpOnly = true;
+    options.SlidingExpiration = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.Name = cookieSettings!.CookieName;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.MaxAge =  TimeSpan.FromMinutes(cookieSettings.MaxAge);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieSettings.MaxAge);
+    options.EventsType = typeof(JwtCookieAuthenticationEvents);
+});
+
 
 // add scoped services
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
