@@ -18,6 +18,9 @@ builder.Services.Configure<CookieSettings>(builder.Configuration.GetSection("Coo
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+// Add cookie Event type to cookie authentication
+builder.Services.AddScoped<JwtCookieAuthenticationEvents>();
+
 // add authentication
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
