@@ -34,6 +34,7 @@ namespace MessagingApp.Services.Auth
 
             return tokenHandler.CreateToken(tokenDescriptor);
         }
+
         public async Task<bool> AuthenticateUser(LoginRequest loginRequest)
         {
             bool isAuthenticated = false;
@@ -57,6 +58,11 @@ namespace MessagingApp.Services.Auth
             }
 
             return isAuthenticated;
+        }
+
+        public async Task LogoutUser()
+        {
+            
         }
     }
 }
