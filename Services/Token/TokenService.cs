@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using MessagingApp.Configurations;
 using MessagingApp.Models.Responses;
@@ -14,7 +15,7 @@ namespace MessagingApp.Services.Token
     ) : ITokenService
     {
 
-        private string GenerateJwtToken(IDictionary<string, object> claims, bool isRefresh = false)
+        private string GenerateJwtToken(List<Claim> claims, bool isRefresh = false)
         {
             var tokenHandler = new JsonWebTokenHandler();
             byte[] Key = Encoding.UTF8.GetBytes(jwtSettings.Value.AccessKey);
@@ -22,14 +23,14 @@ namespace MessagingApp.Services.Token
 
             if (isRefresh)
             {
-                claims.Add("isRefresh", true);
+                claims.Add(new Claim("IsRefresh", "true"));
                 Expires = jwtSettings.Value.ExpireRefreshInMin;
                 Key = Encoding.UTF8.GetBytes(jwtSettings.Value.RefreshKey);
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Claims = claims,
+                Subject = new ClaimsIdentity(claims),
                 Issuer = jwtSettings.Value.ValidIssuer,
                 Audience = jwtSettings.Value.ValidAudience,
                 Expires = DateTime.UtcNow.AddMinutes(Expires),
@@ -39,7 +40,7 @@ namespace MessagingApp.Services.Token
             return tokenHandler.CreateToken(tokenDescriptor);
         }
 
-        public TokenResponse GenerateTokens(IDictionary<string, object> claims)
+        public TokenResponse GenerateTokens(List<Claim> claims)
         {
             string accessToken = GenerateJwtToken(claims);
             string refreshToken = GenerateJwtToken(claims, true);
@@ -93,12 +94,12 @@ namespace MessagingApp.Services.Token
             var tokenHandler = new JsonWebTokenHandler();
             var jsonWebToken = tokenHandler.ReadJsonWebToken(refreshToken);
 
-            Dictionary<string, object> claims = [];
+            List<Claim> claims = [];
             foreach (var claim in jsonWebToken.Claims)
             {
                 if (claim.Type != "isRefresh")
                 {
-                    claims[claim.Type] = claim.Value;
+                    claims.Add(claim);
                 }
             }
 

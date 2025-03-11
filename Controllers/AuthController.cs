@@ -1,6 +1,7 @@
 using MessagingApp.Configurations;
 using MessagingApp.Models.Requests;
 using MessagingApp.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -15,10 +16,16 @@ namespace MessagingApp.Controllers
         {
             bool isAuthenticated = await authService.AuthenticateUser(loginRequest);
 
-            return Ok(isAuthenticated);
+            if (isAuthenticated) {
+                return Ok(isAuthenticated);
+            } else {
+                return Unauthorized();
+            }
+
         }
 
         [HttpGet("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             Response.Cookies.Delete(cookieSettings.Value.CookieName);

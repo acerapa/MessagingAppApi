@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using MessagingApp.Configurations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace MessagingApp.Controllers
 {
@@ -14,7 +16,7 @@ namespace MessagingApp.Controllers
         public ActionResult<List<object>> Workspaces()
         {
             logger.LogInformation("Workspaces requested");
-            logger.LogInformation("Loggers info: {cookieName}", cookieSettings.Value.CookieName);
+            logger.LogInformation("Auth User {name}", User.FindFirstValue(JwtRegisteredClaimNames.NameId));
             List<object> workspaces = [];
             workspaces.Add(new
             {

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MessagingApp.Services.Users.Passwords;
 using MessagingApp.Models.Responses;
 using MessagingApp.Services.Token;
+using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace MessagingApp.Services.Auth
 {
@@ -23,17 +25,17 @@ namespace MessagingApp.Services.Auth
         {
             bool isAuthenticated = false;
 
-            User? user = await context.Users.SingleAsync(u => u.Email == loginRequest.Email);
+            User? user = await context.Users.SingleOrDefaultAsync(u => u.Email == loginRequest.Email);
 
             if (user != null)
             {
                 isAuthenticated = await passwordService.VerifyPasswordAsync(loginRequest.Password, user.Password);
                 if (isAuthenticated)
                 {
-                    IDictionary<string, object> claims = new Dictionary<string, object> {
-                        { "UserId", user.Id },
-                        { "Email", user.Email },
-                    };
+                    List<Claim> claims = [
+                        new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Email, user.Email),   
+                    ];
 
                     TokenResponse tokens = tokenService.GenerateTokens(claims);
                     var httpContext = httpContextAccessor.HttpContext;
