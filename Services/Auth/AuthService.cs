@@ -5,36 +5,20 @@ using MessagingApp.Models.Entities;
 using Microsoft.Extensions.Options;
 using MessagingApp.Models.Requests;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using MessagingApp.Services.Users.Passwords;
-using Microsoft.IdentityModel.JsonWebTokens;
+using MessagingApp.Models.Responses;
+using MessagingApp.Services.Token;
 
 namespace MessagingApp.Services.Auth
 {
     public class AuthService(
+        ITokenService tokenService,
         ApplicationDbContext context,
         IPasswordService passwordService,
-        IOptions<JwtSettings> jwtSettings,
         IOptions<CookieSettings> cookieSettings,
         IHttpContextAccessor httpContextAccessor
     ) : IAuthService
     {
-        public string GenerateJwtToken(IDictionary<string, object> claims)
-        {
-            var tokenHandler = new JsonWebTokenHandler();
-            var key = Encoding.UTF8.GetBytes(jwtSettings.Value.Key);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Claims = claims,
-                Issuer = jwtSettings.Value.ValidIssuer,
-                Audience = jwtSettings.Value.ValidAudience,
-                Expires = DateTime.UtcNow.AddMinutes(jwtSettings.Value.ExpirationInMinutes),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-            };
-
-            return tokenHandler.CreateToken(tokenDescriptor);
-        }
-
         public async Task<bool> AuthenticateUser(LoginRequest loginRequest)
         {
             bool isAuthenticated = false;
@@ -51,18 +35,14 @@ namespace MessagingApp.Services.Auth
                         { "Email", user.Email },
                     };
 
-                    string token = GenerateJwtToken(claims);
+                    TokenResponse tokens = tokenService.GenerateTokens(claims);
                     var httpContext = httpContextAccessor.HttpContext;
-                    httpContext!.Response.Cookies.Append(cookieSettings.Value.CookieName, token);
+                    httpContext!.Response.Cookies.Append(cookieSettings.Value.CookieName, tokens.AccessToken);
+                    httpContext!.Response.Cookies.Append(cookieSettings.Value.CookieNameRefresh, tokens.RefreshToken);
                 }
             }
 
             return isAuthenticated;
-        }
-
-        public async Task LogoutUser()
-        {
-            
         }
     }
 }

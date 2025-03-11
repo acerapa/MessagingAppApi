@@ -2,9 +2,11 @@ namespace MessagingApp.Configurations
 {
     public class JwtSettings
     {
-        public string Key { get; set; } = string.Empty;
+        public string AccessKey { get; set; } = string.Empty;
+        public string RefreshKey { get; set; } = string.Empty;
         public string ValidAudience { get; set; } = string.Empty;
         public string ValidIssuer { get; set; } = string.Empty;
-        public int ExpirationInMinutes { get; set; } = 15;
+        public int ExpireRefreshInMin { get; set; } = 1440;
+        public int ExpireAccessInMin { get; set; } = 15;
     }
 }

@@ -7,14 +7,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MessagingApp.Events
 {
-    public class JwtCookieAuthenticationEvents(IOptions<JwtSettings> jwtSettings) : CookieAuthenticationEvents
+    public class JwtCookieAuthenticationEvents(
+        IOptions<JwtSettings> jwtSettings,
+        ILogger<JwtCookieAuthenticationEvents> logger,
+        IOptions<CookieSettings> cookieSettings
+    ) : CookieAuthenticationEvents
     {
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
         {
-            string? cookieValue = context.Request.Cookies["messaging-app-auth"];
+            string? cookieValue = context.Request.Cookies[cookieSettings.Value.CookieName];
+            logger.LogInformation("Currently getting token: {cookieValue}", cookieValue);
 
             if (string.IsNullOrEmpty(cookieValue))
             {
+                logger.LogInformation($"Here: Cookie is empty");
                 context.RejectPrincipal();
                 return;
             }
@@ -22,7 +28,7 @@ namespace MessagingApp.Events
             try
             {
                 var tokenHandler = new JsonWebTokenHandler();
-                byte[] Key = Encoding.UTF8.GetBytes(jwtSettings.Value.Key);
+                byte[] Key = Encoding.UTF8.GetBytes(jwtSettings.Value.AccessKey);
 
                 await tokenHandler.ValidateTokenAsync(cookieValue, new TokenValidationParameters
                 {
@@ -37,6 +43,7 @@ namespace MessagingApp.Events
 
             catch (Exception)
             {
+                logger.LogInformation($"Here: Cookie is not valid");
                 context.RejectPrincipal();
             }
         }
