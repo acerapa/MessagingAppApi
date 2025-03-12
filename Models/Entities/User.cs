@@ -11,5 +11,6 @@ namespace MessagingApp.Models.Entities
         public required string Email { get; set; }
         public required string Password { get; set; }
 
+        public ICollection<Workspace> Workspaces { get; set; } = [];
     }
 }

@@ -6,6 +6,7 @@ using MessagingApp.Services.Auth;
 using MessagingApp.Services.Token;
 using MessagingApp.Services.Users;
 using MessagingApp.Services.Users.Passwords;
+using MessagingApp.Services.Workspaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -80,6 +81,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 
 // add autoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -49,6 +49,50 @@ namespace MessagingApp.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.Workspace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Workspaces");
+                });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.Workspace", b =>
+                {
+                    b.HasOne("MessagingApp.Models.Entities.User", "Owner")
+                        .WithMany("Workspaces")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.User", b =>
+                {
+                    b.Navigation("Workspaces");
+                });
 #pragma warning restore 612, 618
         }
     }
