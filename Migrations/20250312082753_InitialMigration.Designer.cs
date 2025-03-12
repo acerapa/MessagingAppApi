@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MessagingApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250306134821_CreateUserTable")]
-    partial class CreateUserTable
+    [Migration("20250312082753_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,50 @@ namespace MessagingApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.Workspace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Workspaces");
+                });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.Workspace", b =>
+                {
+                    b.HasOne("MessagingApp.Models.Entities.User", "Owner")
+                        .WithMany("Workspaces")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("MessagingApp.Models.Entities.User", b =>
+                {
+                    b.Navigation("Workspaces");
                 });
 #pragma warning restore 612, 618
         }
