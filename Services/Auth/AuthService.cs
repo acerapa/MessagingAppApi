@@ -1,8 +1,6 @@
 using System.Text;
 using MessagingApp.Context;
-using MessagingApp.Configurations;
 using MessagingApp.Models.Entities;
-using Microsoft.Extensions.Options;
 using MessagingApp.Models.Requests;
 using Microsoft.EntityFrameworkCore;
 using MessagingApp.Services.Users.Passwords;
@@ -17,7 +15,6 @@ namespace MessagingApp.Services.Auth
         ITokenService tokenService,
         ApplicationDbContext context,
         IPasswordService passwordService,
-        IOptions<CookieSettings> cookieSettings,
         IHttpContextAccessor httpContextAccessor
     ) : IAuthService
     {
@@ -39,8 +36,8 @@ namespace MessagingApp.Services.Auth
 
                     TokenResponse tokens = tokenService.GenerateTokens(claims);
                     var httpContext = httpContextAccessor.HttpContext;
-                    httpContext!.Response.Cookies.Append(cookieSettings.Value.CookieName, tokens.AccessToken);
-                    httpContext!.Response.Cookies.Append(cookieSettings.Value.CookieNameRefresh, tokens.RefreshToken);
+                    tokenService.SetTokenToCookie(tokens.AccessToken);
+                    tokenService.SetTokenToCookie(tokens.RefreshToken, true);
                 }
             }
 

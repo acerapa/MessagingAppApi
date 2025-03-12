@@ -16,7 +16,7 @@ namespace MessagingApp.Controllers
         public ActionResult<List<object>> Workspaces()
         {
             logger.LogInformation("Workspaces requested");
-            logger.LogInformation("Auth User {name}", User.FindFirstValue(JwtRegisteredClaimNames.NameId));
+            logger.LogInformation("Auth User {name}", User.FindFirstValue(JwtRegisteredClaimNames.Email));
             List<object> workspaces = [];
             workspaces.Add(new
             {
