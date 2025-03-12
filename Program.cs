@@ -1,7 +1,6 @@
 using System.Text;
 using MessagingApp.Configurations;
 using MessagingApp.Context;
-using MessagingApp.Events;
 using MessagingApp.Models.Responses;
 using MessagingApp.Services.Auth;
 using MessagingApp.Services.Token;
