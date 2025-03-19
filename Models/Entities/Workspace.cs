@@ -15,6 +15,6 @@ namespace MessagingApp.Models.Entities
         [ForeignKey("User")]
         public required int OwnerId { get; set;}
 
-        public virtual User Owner { get; set;} = null!;
+        public virtual User? Owner { get; set;}
     }
 }

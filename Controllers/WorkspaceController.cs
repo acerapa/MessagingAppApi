@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using MessagingApp.Models.Entities;
 using MessagingApp.Models.Requests;
 using MessagingApp.Services.Workspaces;
@@ -17,39 +16,20 @@ namespace MessagingApp.Controllers
     {
         [HttpGet]
         [Authorize]
-        public ActionResult<List<object>> Workspaces()
+        public async Task<ActionResult<Workspace[]>> Workspaces()
         {
-            logger.LogInformation("Workspaces requested");
-            logger.LogInformation("Auth User {name}", User.FindFirstValue(JwtRegisteredClaimNames.Email));
-            List<object> workspaces = [];
-            workspaces.Add(new
-            {
-                Name = "Workspace 1",
-                Id = 1,
-                Description = "This is the first workspace"
-            });
-
-            // add more workspaces here with increasing id's
-            workspaces.Add(new
-            {
-                Name = "Workspace 2",
-                Id = 2,
-                Description = "This is the second workspace"
-            });
-            workspaces.Add(new
-            {
-                Name = "Workspace 3",
-                Id = 3,
-                Description = "This is the third workspace"
-            });
-            workspaces.Add(new
-            {
-                Name = "Workspace 4",
-                Id = 4,
-                Description = "This is the fourth workspace"
-            });
-
+            Workspace[] workspaces = await workspaceService.GetWorkspacesAsync();
             return Ok(workspaces);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<ActionResult<Workspace?>> Workspace(int id)
+        {
+            // Workspace? workspace = await workspaceService.GetWorkspaceAsync(id);
+            Workspace? workspace = await workspaceService.TestWorkspace(id);
+            if (workspace == null) return NotFound();
+            return Ok(workspace);
         }
 
         [HttpPost]
@@ -76,6 +56,35 @@ namespace MessagingApp.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<ActionResult> UpdateWorkspace(int id, WorkspaceUpdateRequest workspaceUpdateRequest)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+
+                await workspaceService.UpdateWorkspaceAsync(id, workspaceUpdateRequest);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+    
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteWorkspace(int id)
+        {
+            try {
+                await workspaceService.DeleteWorkspaceAsync(id);
+                return Ok();
+            } catch (Exception ex) {
                 return BadRequest(ex);
             }
         }

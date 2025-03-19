@@ -1,25 +1,39 @@
+using AutoMapper;
 using MessagingApp.Context;
 using MessagingApp.Models.Entities;
 using MessagingApp.Models.Requests;
 using MessagingApp.Services.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace MessagingApp.Services.Workspaces
 {
     public class WorkspaceService(
         IUserService userService,
-        ApplicationDbContext _context
+        ApplicationDbContext _context,
+        IMapper mapper,
+        ILogger<WorkspaceService> wsLogger
     ) : IWorkspaceService
     {
-        public Task<Workspace> GetWorkspaceAsync(int id)
+        public async Task<Workspace?> GetWorkspaceAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Workspaces.Include(w => w.Owner).SingleOrDefaultAsync(w => w.Id == id);
+        }
+
+        public async Task<Workspace?> TestWorkspace(int id)
+        {
+            return await _context.Workspaces.SingleOrDefaultAsync(w => w.Id == id);
+        }
+        public async Task<Workspace[]> GetWorkspacesAsync()
+        {
+            Workspace[] workspaces = await _context.Workspaces.ToArrayAsync();
+            return workspaces;
         }
 
         public async Task<Workspace> CreateWorkspaceAsync(WorkspaceCreateRequest workspaceCreateRequest)
         {
             User? user = await userService.GetUser(workspaceCreateRequest.OwnerId ?? 0);
             if (user == null) throw new Exception("User not found");
-            
+
             Workspace workspace = new()
             {
                 Name = workspaceCreateRequest.Name,
@@ -34,5 +48,28 @@ namespace MessagingApp.Services.Workspaces
             return workspace;
         }
 
+        public async Task UpdateWorkspaceAsync(int id, WorkspaceUpdateRequest updateRequest)
+        {
+            Workspace? workspace = await _context.Workspaces.SingleOrDefaultAsync(w => w.Id == id);
+
+            if (workspace == null) throw new Exception("Workspace not found");
+
+            mapper.Map(updateRequest, workspace);
+
+            // if (updateRequest.Name != null) workspace.Name = updateRequest.Name;
+            // if (updateRequest.Description != null) workspace.Description = updateRequest.Description;
+            // if (updateRequest.ImageUrl != null) workspace.ImageUrl = updateRequest.ImageUrl;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteWorkspaceAsync(int id)
+        {
+            Workspace? workspace = await GetWorkspaceAsync(id);
+            if (workspace == null) throw new Exception("Workspace not found");
+
+            _context.Workspaces.Remove(workspace);
+            await _context.SaveChangesAsync();
+        }
     }
 }
