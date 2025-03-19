@@ -1,5 +1,6 @@
 using MessagingApp.Models.Entities;
 using MessagingApp.Models.Requests;
+using MessagingApp.Models.Responses;
 using MessagingApp.Services.Workspaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace MessagingApp.Controllers
     {
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<Workspace[]>> Workspaces()
+        public async Task<ActionResult<WorkspaceResponse[]>> Workspaces()
         {
-            Workspace[] workspaces = await workspaceService.GetWorkspacesAsync();
+            WorkspaceResponse[] workspaces = await workspaceService.GetWorkspacesAsync();
             return Ok(workspaces);
         }
 

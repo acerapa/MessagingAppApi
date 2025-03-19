@@ -1,6 +1,7 @@
 using AutoMapper;
 using MessagingApp.Models.DTOs;
 using MessagingApp.Models.Entities;
+using MessagingApp.Models.Responses;
 
 namespace MessagingApp.MappingProfiles
 {
@@ -9,7 +10,9 @@ namespace MessagingApp.MappingProfiles
         public UserProfile()
         {
             CreateMap<UserUpdateDTO, User>()
-                .ForAllMembers(opt => opt.MapFrom((src, dest, srcMember, destMember) => destMember ?? srcMember));
+                .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
+            
+            CreateMap<User, UserResponse>();
         }
     }
 }

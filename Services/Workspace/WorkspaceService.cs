@@ -1,7 +1,9 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MessagingApp.Context;
 using MessagingApp.Models.Entities;
 using MessagingApp.Models.Requests;
+using MessagingApp.Models.Responses;
 using MessagingApp.Services.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +12,7 @@ namespace MessagingApp.Services.Workspaces
     public class WorkspaceService(
         IUserService userService,
         ApplicationDbContext _context,
-        IMapper mapper,
-        ILogger<WorkspaceService> wsLogger
+        IMapper mapper
     ) : IWorkspaceService
     {
         public async Task<Workspace?> GetWorkspaceAsync(int id)
@@ -23,9 +24,11 @@ namespace MessagingApp.Services.Workspaces
         {
             return await _context.Workspaces.SingleOrDefaultAsync(w => w.Id == id);
         }
-        public async Task<Workspace[]> GetWorkspacesAsync()
+        public async Task<WorkspaceResponse[]> GetWorkspacesAsync()
         {
-            Workspace[] workspaces = await _context.Workspaces.ToArrayAsync();
+            WorkspaceResponse[] workspaces = await _context.Workspaces
+                .ProjectTo<WorkspaceResponse>(mapper.ConfigurationProvider)
+                .ToArrayAsync();
             return workspaces;
         }
 
@@ -55,10 +58,6 @@ namespace MessagingApp.Services.Workspaces
             if (workspace == null) throw new Exception("Workspace not found");
 
             mapper.Map(updateRequest, workspace);
-
-            // if (updateRequest.Name != null) workspace.Name = updateRequest.Name;
-            // if (updateRequest.Description != null) workspace.Description = updateRequest.Description;
-            // if (updateRequest.ImageUrl != null) workspace.ImageUrl = updateRequest.ImageUrl;
 
             await _context.SaveChangesAsync();
         }

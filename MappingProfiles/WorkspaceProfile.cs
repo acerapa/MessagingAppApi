@@ -1,6 +1,7 @@
 using AutoMapper;
 using MessagingApp.Models.Entities;
 using MessagingApp.Models.Requests;
+using MessagingApp.Models.Responses;
 
 namespace MessagingApp.MappingProfiles
 {
@@ -9,9 +10,9 @@ namespace MessagingApp.MappingProfiles
         public WorkspaceProfile()
         {
             CreateMap<WorkspaceUpdateRequest, Workspace>()
-                .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
-                .ForMember(dest => dest.Owner, opt => opt.Ignore())
-                .ForAllMembers(opt => opt.MapFrom((src, dest, srcMember, destMember) => srcMember ?? destMember));
+                .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
+            
+            CreateMap<Workspace, WorkspaceResponse>();
         }
     }
 }
