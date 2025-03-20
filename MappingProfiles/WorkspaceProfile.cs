@@ -11,8 +11,9 @@ namespace MessagingApp.MappingProfiles
         {
             CreateMap<WorkspaceUpdateRequest, Workspace>()
                 .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
-            
+
             CreateMap<Workspace, WorkspaceResponse>();
+            CreateMap<Workspace, WorkspaceShortResponse>();
         }
     }
 }
