@@ -1,18 +1,18 @@
 using AutoMapper;
-using MessagingApp.Models.DTOs;
 using MessagingApp.Models.Entities;
+using MessagingApp.Models.Requests;
 using MessagingApp.Models.Responses;
 
 namespace MessagingApp.MappingProfiles
 {
-    public class UserProfile : Profile
+    public class WorkspaceProfile : Profile
     {
-        public UserProfile()
+        public WorkspaceProfile()
         {
-            CreateMap<UserUpdateDTO, User>()
+            CreateMap<WorkspaceUpdateRequest, Workspace>()
                 .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
             
-            CreateMap<User, UserResponse>();
+            CreateMap<Workspace, WorkspaceResponse>();
         }
     }
 }

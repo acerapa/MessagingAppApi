@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using MessagingApp.Configurations;
 using MessagingApp.Context;
 using MessagingApp.Models.Responses;
@@ -54,21 +55,19 @@ builder.Services.AddAuthentication(options =>
             string? accessToken = context.Request.Cookies[cookieSettings!.CookieName];
             string? refreshToken = context.Request.Cookies[cookieSettings.CookieNameRefresh];
 
-            if (!string.IsNullOrEmpty(accessToken))
+            if (!string.IsNullOrEmpty(accessToken) && await tokenService.ValidateTokenAsync(accessToken))
             {
-                bool isAccessTokenValid = await tokenService.ValidateTokenAsync(accessToken);
-                if (!string.IsNullOrEmpty(refreshToken) && !isAccessTokenValid)
-                {
-                    bool isRefreshTokenValid = await tokenService.ValidateTokenAsync(refreshToken, true);
-                    // call regenerate token
-                    TokenResponse tokenResponse = tokenService.RegenerateTokens(refreshToken);
-                    tokenService.SetTokenToCookie(tokenResponse.AccessToken);
-                    tokenService.SetTokenToCookie(tokenResponse.RefreshToken, true);
-                }
-                else
-                {
-                    context.Token = accessToken;
-                }
+                context.Token = accessToken;
+            }
+            else if (!string.IsNullOrEmpty(refreshToken))
+            {
+                bool isRefreshTokenValid = await tokenService.ValidateTokenAsync(refreshToken, true);
+                // call regenerate token
+                TokenResponse tokenResponse = tokenService.RegenerateTokens(refreshToken);
+                tokenService.SetTokenToCookie(tokenResponse.AccessToken);
+                tokenService.SetTokenToCookie(tokenResponse.RefreshToken, true);
+
+                context.Token = tokenResponse.AccessToken;
             }
         },
     };
@@ -84,9 +83,11 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 
 // add autoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

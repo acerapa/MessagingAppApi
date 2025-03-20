@@ -33,14 +33,14 @@ namespace MessagingApp.Services.Users
 
         public async Task<User?> GetUser(int id)
         {
-            User? user = await _context.Users.FindAsync(id);
+            User? user = await _context.Users.Include(u => u.Workspaces).SingleOrDefaultAsync(u => u.Id == id);
 
             return user;
         }
 
         public async Task<User[]> GetUsers()
         {
-            User[] users = await _context.Users.ToArrayAsync<User>();
+            User[] users = await _context.Users.ToArrayAsync();
 
             return users;
         }
