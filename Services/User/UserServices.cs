@@ -1,7 +1,9 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MessagingApp.Context;
 using MessagingApp.Models.DTOs;
 using MessagingApp.Models.Entities;
+using MessagingApp.Models.Responses;
 using MessagingApp.Services.Users.Passwords;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,24 +33,27 @@ namespace MessagingApp.Services.Users
             return user;
         }
 
-        public async Task<User?> GetUser(int id)
+        public async Task<UserResponse?> GetUser(int id)
         {
-            User? user = await _context.Users.Include(u => u.Workspaces).SingleOrDefaultAsync(u => u.Id == id);
+            UserResponse? user = await _context.Users
+                .ProjectTo<UserResponse>(mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(u => u.Id == id);
 
             return user;
         }
 
-        public async Task<User[]> GetUsers()
+        public async Task<UserResponse[]> GetUsers()
         {
-            User[] users = await _context.Users.ToArrayAsync();
+            UserResponse[] users = await _context.Users
+                .ProjectTo<UserResponse>(mapper.ConfigurationProvider)
+                .ToArrayAsync();
 
             return users;
         }
 
-        public async Task DeleteUser(User user)
+        public async Task DeleteUser(UserResponse user)
         {
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await _context.Users.Where(u => u.Id == user.Id).ExecuteDeleteAsync();
         }
 
         public async Task<User?> UpdateUser(int id, UserUpdateDTO userUpdateDTO)

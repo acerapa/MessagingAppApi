@@ -34,9 +34,7 @@ namespace MessagingApp.Services.Workspaces
 
         public async Task<Workspace> CreateWorkspaceAsync(WorkspaceCreateRequest workspaceCreateRequest)
         {
-            User? user = await userService.GetUser(workspaceCreateRequest.OwnerId ?? 0);
-            if (user == null) throw new Exception("User not found");
-
+            UserResponse? user = await userService.GetUser(workspaceCreateRequest.OwnerId ?? 0) ?? throw new Exception("User not found");
             Workspace workspace = new()
             {
                 Name = workspaceCreateRequest.Name,

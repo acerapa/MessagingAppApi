@@ -11,8 +11,10 @@ namespace MessagingApp.MappingProfiles
         {
             CreateMap<UserUpdateDTO, User>()
                 .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
-            
+
             CreateMap<User, UserResponse>();
+            CreateMap<User, UserShortResponse>()
+                .ForMember(destination => destination.FullName, opt => opt.MapFrom(source => $"{source.FirstName} {source.LastName}"));
         }
     }
 }
