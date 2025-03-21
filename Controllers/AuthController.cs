@@ -16,15 +16,18 @@ namespace MessagingApp.Controllers
         {
             bool isAuthenticated = await authService.AuthenticateUser(loginRequest);
 
-            if (isAuthenticated) {
+            if (isAuthenticated)
+            {
                 return Ok(isAuthenticated);
-            } else {
+            }
+            else
+            {
                 return Unauthorized();
             }
 
         }
 
-        [HttpGet("logout")]
+        [HttpPost("logout")]
         [Authorize]
         public async Task<IActionResult> Logout()
         {
