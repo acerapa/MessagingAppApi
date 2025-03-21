@@ -1,4 +1,6 @@
-namespace MessagingApp.Models.Responses
+using MessagingApp.Models.Responses;
+
+namespace MessagingApp.Models.DTOs.Responses
 {
     public class UserResponse
     {

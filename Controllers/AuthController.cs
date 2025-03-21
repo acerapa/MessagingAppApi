@@ -1,5 +1,5 @@
 using MessagingApp.Configurations;
-using MessagingApp.Models.Requests;
+using MessagingApp.Models.DTOs.Requests;
 using MessagingApp.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

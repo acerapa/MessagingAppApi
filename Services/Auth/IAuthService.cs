@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using MessagingApp.Models.Requests;
+using MessagingApp.Models.DTOs.Requests;
 
 namespace MessagingApp.Services.Auth
 {

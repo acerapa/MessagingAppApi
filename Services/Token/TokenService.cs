@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using MessagingApp.Configurations;
-using MessagingApp.Models.Responses;
+using MessagingApp.Models.DTOs.Responses;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
