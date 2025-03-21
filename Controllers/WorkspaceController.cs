@@ -1,5 +1,5 @@
+using MessagingApp.Models.DTOs.Requests;
 using MessagingApp.Models.Entities;
-using MessagingApp.Models.Requests;
 using MessagingApp.Models.Responses;
 using MessagingApp.Services.Workspaces;
 using Microsoft.AspNetCore.Authorization;

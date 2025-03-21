@@ -1,8 +1,7 @@
 using System.Text;
-using System.Text.Json.Serialization;
 using MessagingApp.Configurations;
 using MessagingApp.Context;
-using MessagingApp.Models.Responses;
+using MessagingApp.Models.DTOs.Responses;
 using MessagingApp.Services.Auth;
 using MessagingApp.Services.Token;
 using MessagingApp.Services.Users;

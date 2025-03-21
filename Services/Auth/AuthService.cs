@@ -1,13 +1,12 @@
-using System.Text;
 using MessagingApp.Context;
 using MessagingApp.Models.Entities;
-using MessagingApp.Models.Requests;
+using MessagingApp.Models.DTOs.Requests;
 using Microsoft.EntityFrameworkCore;
 using MessagingApp.Services.Users.Passwords;
-using MessagingApp.Models.Responses;
 using MessagingApp.Services.Token;
 using System.Security.Claims;
 using Microsoft.IdentityModel.JsonWebTokens;
+using MessagingApp.Models.DTOs.Responses;
 
 namespace MessagingApp.Services.Auth
 {

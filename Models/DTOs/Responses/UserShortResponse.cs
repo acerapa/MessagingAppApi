@@ -1,4 +1,4 @@
-namespace MessagingApp.Models.Responses
+namespace MessagingApp.Models.DTOs.Responses
 {
     public class UserShortResponse
     {

@@ -1,8 +1,9 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MessagingApp.Context;
+using MessagingApp.Models.DTOs.Requests;
+using MessagingApp.Models.DTOs.Responses;
 using MessagingApp.Models.Entities;
-using MessagingApp.Models.Requests;
 using MessagingApp.Models.Responses;
 using MessagingApp.Services.Users;
 using Microsoft.EntityFrameworkCore;

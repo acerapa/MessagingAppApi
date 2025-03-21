@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MessagingApp.Models.Requests
+namespace MessagingApp.Models.DTOs.Requests
 {
     public class WorkspaceCreateRequest
     {

@@ -2,8 +2,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MessagingApp.Context;
 using MessagingApp.Models.DTOs;
+using MessagingApp.Models.DTOs.Responses;
 using MessagingApp.Models.Entities;
-using MessagingApp.Models.Responses;
 using MessagingApp.Services.Users.Passwords;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,7 +1,7 @@
 using AutoMapper;
 using MessagingApp.Models.DTOs;
+using MessagingApp.Models.DTOs.Responses;
 using MessagingApp.Models.Entities;
-using MessagingApp.Models.Responses;
 
 namespace MessagingApp.MappingProfiles
 {

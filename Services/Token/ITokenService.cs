@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using MessagingApp.Models.Responses;
+using MessagingApp.Models.DTOs.Responses;
 
 namespace MessagingApp.Services.Token
 {

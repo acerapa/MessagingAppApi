@@ -1,3 +1,5 @@
+using MessagingApp.Models.DTOs.Responses;
+
 namespace MessagingApp.Models.Responses
 {
     public class WorkspaceResponse
