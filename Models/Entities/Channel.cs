@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MessagingApp.Models.Responses;
 
 namespace MessagingApp.Models.Entities
 {
@@ -11,6 +10,8 @@ namespace MessagingApp.Models.Entities
         public required string Name { get; set; }
         public string? Description { get; set; }
         public bool IsPrivate { get; set; } = false;
+
+        // TODO: Add who created the channel
         
         [ForeignKey("Workspace")]
         public int WorkspaceId { get; set; }
