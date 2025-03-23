@@ -2,7 +2,9 @@ using System.Text;
 using MessagingApp.Configurations;
 using MessagingApp.Context;
 using MessagingApp.Models.DTOs.Responses;
+using MessagingApp.Services;
 using MessagingApp.Services.Auth;
+using MessagingApp.Services.Channel;
 using MessagingApp.Services.Token;
 using MessagingApp.Services.Users;
 using MessagingApp.Services.Users.Passwords;
@@ -78,6 +80,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserServices>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IChannelService, ChannelService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 

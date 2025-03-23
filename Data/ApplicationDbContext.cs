@@ -10,6 +10,7 @@ namespace MessagingApp.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Channel> Channels { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
     }
 }
