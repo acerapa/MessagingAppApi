@@ -7,10 +7,12 @@ namespace MessagingApp.MappingProfiles
 {
     public class ChannelProfile : Profile
     {
-        public ChannelProfile ()
+        public ChannelProfile()
         {
             CreateMap<ChannelCreateRequest, Channel>();
             CreateMap<Channel, ChannelResponse>();
+            CreateMap<ChannelUpdateRequest, Channel>()
+                .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
         }
     }
 }
