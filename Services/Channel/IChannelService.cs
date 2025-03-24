@@ -10,5 +10,6 @@ namespace MessagingApp.Services.Channels
         Task<ChannelResponse> CreateChannel (ChannelCreateRequest request);
         Task<Channel?> GetChannelById (int id, bool isNotTracking = false);
         Task<ChannelResponse> UpdateChannel (int Id, ChannelUpdateRequest request);
+        Task DeleteChannel (int Id);
     }
 }

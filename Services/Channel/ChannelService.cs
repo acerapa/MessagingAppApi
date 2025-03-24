@@ -23,6 +23,17 @@ namespace MessagingApp.Services.Channels
             return mapper.Map<ChannelResponse>(channelToAdd);
         }
 
+        public async Task DeleteChannel(int Id)
+        {
+            Channel channelToDelete = await GetChannelById(Id) ??
+                throw new ArgumentException($"Channel with {Id} id not found!");
+
+            context.Channels.Remove(channelToDelete);
+            await context.SaveChangesAsync();
+            
+            return;
+        }
+
         public Task<Channel?> GetChannelById(int id, bool isNotTracking = false)
         {
             IQueryable<Channel> query = context.Channels.AsQueryable();

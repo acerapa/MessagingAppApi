@@ -45,5 +45,19 @@ namespace MessagingApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteChannel(int Id)
+        {
+            try
+            {
+                await channelService.DeleteChannel(Id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
