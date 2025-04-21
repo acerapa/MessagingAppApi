@@ -10,9 +10,11 @@ namespace MessagingApp.Models.Entities
         public required string Name { get; set; }
         public string? Description { get; set; }
         public bool IsPrivate { get; set; } = false;
-
-        // TODO: Add who created the channel
         
+        [ForeignKey("User")]
+        public int CreatedById { get; set; }
+        public User CreatedBy { get; set; } = default!;
+
         [ForeignKey("Workspace")]
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = default!;

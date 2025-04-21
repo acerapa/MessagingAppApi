@@ -13,14 +13,17 @@ namespace MessagingApp.Services.Channels
         IMapper mapper
     ) : IChannelService
     {
-        public async Task<ChannelResponse> CreateChannel(ChannelCreateRequest request)
+        public async Task<ChannelShortResponse> CreateChannel(int userId, ChannelCreateRequest request)
         {
             Channel channelToAdd = mapper.Map<Channel>(request);
+            
+            channelToAdd.CreatedById = userId;
+            
             context.Channels.Add(channelToAdd);
 
             await context.SaveChangesAsync();
 
-            return mapper.Map<ChannelResponse>(channelToAdd);
+            return mapper.Map<ChannelShortResponse>(channelToAdd);
         }
 
         public async Task DeleteChannel(int Id)

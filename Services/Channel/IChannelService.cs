@@ -7,7 +7,7 @@ namespace MessagingApp.Services.Channels
     public interface IChannelService
     {
         Task<List<ChannelResponse>> GetWorkspaceChannel (int workspaceId);
-        Task<ChannelResponse> CreateChannel (ChannelCreateRequest request);
+        Task<ChannelShortResponse> CreateChannel (int userId, ChannelCreateRequest request);
         Task<Channel?> GetChannelById (int id, bool isNotTracking = false);
         Task<ChannelResponse> UpdateChannel (int Id, ChannelUpdateRequest request);
         Task DeleteChannel (int Id);
