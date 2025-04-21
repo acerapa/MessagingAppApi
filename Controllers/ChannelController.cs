@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class ChannelController(
         IChannelService channelService
-    ) : ControllerBase
+    ) : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> GetAllRelatedChannel(int workspaceId)
@@ -23,7 +23,12 @@ namespace MessagingApp.Controllers
         {
             try
             {
-                ChannelResponse channel = await channelService.CreateChannel(request);
+                int? loggedInUserId = GetAuthUserIdFromCliams();
+
+                if (loggedInUserId == null)
+                    return Unauthorized();
+
+                ChannelShortResponse channel = await channelService.CreateChannel((int)loggedInUserId, request);
                 return Ok(channel);
             }
             catch (Exception ex)

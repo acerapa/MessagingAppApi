@@ -11,6 +11,7 @@ namespace MessagingApp.MappingProfiles
         {
             CreateMap<ChannelCreateRequest, Channel>();
             CreateMap<Channel, ChannelResponse>();
+            CreateMap<Channel, ChannelShortResponse>();
             CreateMap<ChannelUpdateRequest, Channel>()
                 .ForAllMembers(opt => opt.Condition((source, destination, srcMember, destMember) => srcMember is not null));
         }

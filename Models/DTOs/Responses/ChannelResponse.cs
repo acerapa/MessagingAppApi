@@ -8,6 +8,7 @@ namespace MessagingApp.Models.DTOs.Responses
         public int WorkspaceId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public UserShortResponse CreatedBy { get; set; } = default!;
         public WorkspaceResponse Workspace { get; set; } = default!;
     }
 }
